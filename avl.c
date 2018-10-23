@@ -41,12 +41,15 @@ int insert(TREE *tree, int parent, int *root, DATA d) {
         tree->nodelist[newnode].parent = parent;
         tree->nodelist[newnode].height = 0;
         *root = newnode;
-        balance(tree, root);
     }
-    else if (d < tree->nodelist[thisnode].data)
-        return insert(tree, thisnode, &(tree->nodelist[thisnode].left), d);
-    else if (d > tree->nodelist[thisnode].data)
-        return insert(tree, thisnode, &(tree->nodelist[thisnode].right), d);
+    else if (d < tree->nodelist[thisnode].data &&
+             FAILURE == insert(tree, thisnode, &(tree->nodelist[thisnode].left), d))
+        return FAILURE;
+    else if (d > tree->nodelist[thisnode].data &&
+             FAILURE == insert(tree, thisnode, &(tree->nodelist[thisnode].right), d))
+        return FAILURE;
+
+    balance(tree, parent, root);
     return 0;
 }
 
@@ -54,10 +57,12 @@ int delete(TREE *tree, int parent, int *root, DATA d) {
     int thisnode = *root;
     if (thisnode == -1)
         return 0;
-    if (d < tree->nodelist[thisnode].data)
-        return delete(tree, thisnode, &(tree->nodelist[thisnode].left), d);
-    else if (d > tree->nodelist[thisnode].data)
-        return delete(tree, thisnode, &(tree->nodelist[thisnode].right), d);
+    if (d < tree->nodelist[thisnode].data &&
+        FAILURE == delete(tree, thisnode, &(tree->nodelist[thisnode].left), d))
+        return FAILURE;
+    else if (d > tree->nodelist[thisnode].data &&
+             FAILURE == delete(tree, thisnode, &(tree->nodelist[thisnode].right), d))
+        return FAILURE;
     else {
         /* DELETE THIS NODE */
         if (tree->nodelist[thisnode].left != -1 &&
@@ -74,7 +79,8 @@ int delete(TREE *tree, int parent, int *root, DATA d) {
                 tree->nodelist[*root].parent = parent;
             free_up_node(tree, thisnode);
         }
-        balance(tree, root);
     }
+
+    balance(tree, parent, root);
     return 0;
 }
