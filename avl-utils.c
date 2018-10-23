@@ -189,6 +189,21 @@ void inorder(TREE *tree, int root) {
     return;
 }
 
+void print_tree(TREE *tree, int root, int indent) {
+    int i;
+    if (root == -1)
+        return;
+    print_tree(tree, tree->nodelist[root].left, indent + 1);
+    putchar('\n');
+    for (i = 0; i < indent-1; i++)
+        printf("    ");
+    printf("--- ");
+    printf("%d\n", tree->nodelist[root].data);
+    putchar('\n');
+    print_tree(tree, tree->nodelist[root].right, indent + 1);
+    return;
+}
+
 void print_pstree(TREE *tree, int root) {
     if (root != -1) {
         fprintf(stderr, "\\pstree{\\TCircle[radius=1.0]{%d\\linebreak%d}}{\n",

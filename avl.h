@@ -31,6 +31,7 @@ extern void rotate_on_insert_RL(TREE *, int , int *);
 extern void balance(TREE *, int, int *);
 
 extern void inorder(TREE *, int);
+extern void print_tree(TREE *, int, int);
 extern void print_pstree(TREE *, int);
 
 #define HEIGHT(T, nodeindex) ( ((nodeindex) == -1) ? -1 : T->nodelist[nodeindex].height )

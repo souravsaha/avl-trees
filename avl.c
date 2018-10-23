@@ -40,6 +40,7 @@ int insert(TREE *tree, int parent, int *root, DATA d) {
         tree->nodelist[newnode].right = -1;
         tree->nodelist[newnode].parent = parent;
         tree->nodelist[newnode].height = 0;
+        tree->num_nodes++;
         *root = newnode;
     }
     else if (d < tree->nodelist[thisnode].data &&
@@ -78,6 +79,7 @@ int delete(TREE *tree, int parent, int *root, DATA d) {
             if (*root != -1)
                 tree->nodelist[*root].parent = parent;
             free_up_node(tree, thisnode);
+            tree->num_nodes--;
         }
     }
 
