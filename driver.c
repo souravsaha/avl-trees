@@ -12,8 +12,7 @@ int main(int ac, char *av[])
         printf("Inserting %d\n", atoi(av[i]));
         if (FAILURE == insert(&t, -1, &(t.root), atoi(av[i])))
             return FAILURE;
-        print_tree(&t, t.root, 0);
-        getchar();
+        print_pstree(&t, t.root);
     }
 
     return 0;
