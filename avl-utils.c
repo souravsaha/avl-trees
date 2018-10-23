@@ -81,10 +81,8 @@ void rotate_on_insert_LL(TREE *tree, int parent, int *node) {
 
 
     /* update heights */
-    tree->nodelist[k2].height = 1 + 
-        MAX(tree->nodelist[Y].height, tree->nodelist[Z].height);
-    tree->nodelist[k1].height = 1 + 
-        MAX(tree->nodelist[X].height, tree->nodelist[k2].height);
+    tree->nodelist[k2].height = 1 + MAX(HEIGHT(tree, Y), HEIGHT(tree, Z));
+    tree->nodelist[k1].height = 1 + MAX(HEIGHT(tree, X), HEIGHT(tree, k2));
 
     *node = k1;
     return;
@@ -107,10 +105,8 @@ void rotate_on_insert_RR(TREE *tree, int parent, int *node) {
     if (Y != -1) tree->nodelist[Y].parent = k1;
 
     /* update heights */
-    tree->nodelist[k1].height = 1 + 
-        MAX(tree->nodelist[X].height, tree->nodelist[Y].height);
-    tree->nodelist[k2].height = 1 + 
-        MAX(tree->nodelist[k1].height, tree->nodelist[Z].height);
+    tree->nodelist[k1].height = 1 + MAX(HEIGHT(tree, X), HEIGHT(tree, Y));
+    tree->nodelist[k2].height = 1 + MAX(HEIGHT(tree, k1), HEIGHT(tree, Z));
 
     *node = k2;
     return;
@@ -135,12 +131,9 @@ void rotate_on_insert_LR(TREE *tree, int parent, int *node) {
     /* TODO: update parent index of affected nodes */
 
     /* update heights */
-    tree->nodelist[k1].height = 1 + 
-        MAX(tree->nodelist[A].height, tree->nodelist[B].height);
-    tree->nodelist[k3].height = 1 + 
-        MAX(tree->nodelist[C].height, tree->nodelist[D].height);
-    tree->nodelist[k2].height = 1 + 
-        MAX(tree->nodelist[k1].height, tree->nodelist[k3].height);
+    tree->nodelist[k1].height = 1 + MAX(HEIGHT(tree, A), HEIGHT(tree, B));
+    tree->nodelist[k3].height = 1 + MAX(HEIGHT(tree, C), HEIGHT(tree, D));
+    tree->nodelist[k2].height = 1 + MAX(HEIGHT(tree, k1), HEIGHT(tree, k3));
 
     *node = k2;
     return;
@@ -149,8 +142,8 @@ void rotate_on_insert_LR(TREE *tree, int parent, int *node) {
 void rotate_on_insert_RL(TREE *tree, int parent, int *node) {
     /* See CMSC 420 Lecture Notes by David M. Mount, UMCP, pg. 39. */
     int k1 = *node;
-    rotate_on_insert_RR(tree, k1, &(tree->nodelist[k1].right));
-    rotate_on_insert_LL(tree, parent, node);
+    rotate_on_insert_LL(tree, k1, &(tree->nodelist[k1].right));
+    rotate_on_insert_RR(tree, parent, node);
     return;
 }
 
@@ -176,7 +169,7 @@ void balance(TREE *tree, int parent, int *node) {
     left = tree->nodelist[thisnode].left;
     right = tree->nodelist[thisnode].right;
     tree->nodelist[thisnode].height = 1 +
-        MAX(tree->nodelist[left].height, tree->nodelist[right].height);
+        MAX(HEIGHT(tree, left), HEIGHT(tree, right));
     return;
 }
 
@@ -189,28 +182,38 @@ void inorder(TREE *tree, int root) {
     return;
 }
 
+#if 0
 void print_tree(TREE *tree, int root, int indent) {
     int i;
     if (root == -1)
         return;
-    print_tree(tree, tree->nodelist[root].left, indent + 1);
-    putchar('\n');
+    if (tree->nodelist[root].left != -1) {
+        print_tree(tree, tree->nodelist[root].left, indent + 1);
+        for (i = 0; i < indent; i++)
+            printf("    ");
+        printf("|\n");
+    }
     for (i = 0; i < indent-1; i++)
         printf("    ");
-    printf("--- ");
+    if (indent > 0) printf("--- ");
     printf("%d\n", tree->nodelist[root].data);
-    putchar('\n');
-    print_tree(tree, tree->nodelist[root].right, indent + 1);
+    if (tree->nodelist[root].right != -1) {
+        for (i = 0; i < indent; i++)
+            printf("    ");
+        printf("|\n");
+        print_tree(tree, tree->nodelist[root].right, indent + 1);
+    }
     return;
 }
+#endif
 
 void print_pstree(TREE *tree, int root) {
     if (root != -1) {
-        fprintf(stderr, "\\pstree{\\TCircle[radius=1.0]{%d\\linebreak%d}}{\n",
+        fprintf(stderr, "\\pstree{\\TCircle[radius=1.0]{%d,%d}}{\n",
                 tree->nodelist[root].data, tree->nodelist[root].height);
         print_pstree(tree, tree->nodelist[root].left);
         print_pstree(tree, tree->nodelist[root].right);
-        fprintf(stderr, "}\n");
+        fprintf(stderr, "}\n\n");
     }
     else
         fprintf(stderr, "\\pstree{\\Tn}{} \\pstree{\\Tn}{}");
