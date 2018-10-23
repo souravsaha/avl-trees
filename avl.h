@@ -28,7 +28,7 @@ extern void rotate_on_insert_LL(TREE *, int , int *);
 extern void rotate_on_insert_RR(TREE *, int , int *);
 extern void rotate_on_insert_LR(TREE *, int , int *);
 extern void rotate_on_insert_RL(TREE *, int , int *);
-extern void balance(TREE *, int *);
+extern void balance(TREE *, int, int *);
 
 extern void inorder(TREE *, int);
 extern void print_pstree(TREE *, int);

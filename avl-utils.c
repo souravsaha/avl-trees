@@ -74,9 +74,11 @@ void rotate_on_insert_LL(TREE *tree, int parent, int *node) {
     tree->nodelist[k2].left = Y;
     tree->nodelist[k1].right = k2;
 
+    /* parents (optional) */
     tree->nodelist[k1].parent = parent;
     tree->nodelist[k2].parent = k1;
     if (Y != -1) tree->nodelist[Y].parent = k2;
+
 
     /* update heights */
     tree->nodelist[k2].height = 1 + 
@@ -152,26 +154,22 @@ void rotate_on_insert_RL(TREE *tree, int parent, int *node) {
     return;
 }
 
-void balance(TREE *tree, int *node) {
+void balance(TREE *tree, int parent, int *node) {
     int thisnode = *node;
     int left = tree->nodelist[thisnode].left;
     int right = tree->nodelist[thisnode].right;
 
     if (HEIGHT(tree, left) - HEIGHT(tree, right) > 1) {
-        if (HEIGHT(tree, tree->nodelist[left].left) >= HEIGHT(tree, tree->nodelist[left].right))
-            // TODO rotate_on_insert_()
-            ;
+        if (HEIGHT(tree, tree->nodelist[left].left) > HEIGHT(tree, tree->nodelist[left].right))
+            rotate_on_insert_LL(tree, parent, node);
         else
-            // TODO rotate_on_insert_()
-            ;
+            rotate_on_insert_LR(tree, parent, node);
     }
     else if (HEIGHT(tree, right) - HEIGHT(tree, left) > 1) {
-        if (HEIGHT(tree, tree->nodelist[right].right) >= HEIGHT(tree, tree->nodelist[right].left))
-            // TODO rotate_on_insert_()
-            ;
+        if (HEIGHT(tree, tree->nodelist[right].right) > HEIGHT(tree, tree->nodelist[right].left))
+            rotate_on_insert_RR(tree, parent, node);
         else
-            // TODO rotate_on_insert_()
-            ;
+            rotate_on_insert_RL(tree, parent, node);
     }
 
     thisnode = *node;
