@@ -35,6 +35,10 @@ extern void print_tree(TREE *, int, int);
 extern void print_pstree(TREE *, int);
 
 #define HEIGHT(T, nodeindex) ( ((nodeindex) == -1) ? -1 : T->nodelist[nodeindex].height )
+#define PRINT_NODE(T, nodeindex) { \
+    if (nodeindex != -1) \
+        printf("%d\n", T->nodelist[nodeindex].data); \
+    }
 
 /* API FUNCTIONS */
 extern int init_tree(TREE *);

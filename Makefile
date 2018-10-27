@@ -3,7 +3,7 @@
 CFILES := $(wildcard *.c)
 HFILES := $(wildcard *.h)
 PROG := driver 
-CFLAGS := -g -Wall
+CFLAGS := -g -Wall -DDEBUG
 LDFLAGS :=
 ########################
 

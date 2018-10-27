@@ -12,14 +12,19 @@ int main(int ac, char *av[])
         printf("Inserting %d\n", atoi(av[i]));
         if (FAILURE == insert(&t, -1, &(t.root), atoi(av[i])))
             return FAILURE;
-<<<<<<< HEAD
         fprintf(stderr, "\\begin{sideways}\n");
         print_pstree(&t, t.root);
         fprintf(stderr, "\\end{sideways}\n\\newpage\n");
-=======
-        print_pstree(&t, t.root);
->>>>>>> f429740eb7aa9a68978e15566bbd98df5a205749
     }
 
+    for (i = 1; i < ac; i++) {
+        printf("Starting deletion %d\n", atoi(av[i]));
+        if (FAILURE == delete(&t, -1, &(t.root), atoi(av[i])))
+            return FAILURE;
+        fprintf(stderr, "\\begin{sideways}\n");
+        print_pstree(&t, t.root);
+        fprintf(stderr, "\\end{sideways}\n\\newpage\n");
+    }
+        
     return 0;
 }

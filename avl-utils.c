@@ -64,6 +64,9 @@ int find_successor(TREE *tree, int node) {
 
 void rotate_on_insert_LL(TREE *tree, int parent, int *node) {
     /* See Weiss, DS & AA in C++, 4 ed., Section 4.4.1, Figure 4.34 */
+#ifdef DEBUG
+        printf("LL (right) rotation at %d\n", tree->nodelist[*node].data);
+#endif // DEBUG
     int k2 = *node;
     int k1 = tree->nodelist[k2].left;
     int Z = tree->nodelist[k2].right;
@@ -90,6 +93,9 @@ void rotate_on_insert_LL(TREE *tree, int parent, int *node) {
 
 void rotate_on_insert_RR(TREE *tree, int parent, int *node) {
     /* See Weiss, DS & AA in C++, 4 ed., Section 4.4.1, Figure 4.36 */
+#ifdef DEBUG
+        printf("RR (left) rotation at %d\n", tree->nodelist[*node].data);
+#endif // DEBUG
     int k1 = *node;
     int X = tree->nodelist[k1].left;
     int k2 = tree->nodelist[k1].right;
@@ -114,6 +120,9 @@ void rotate_on_insert_RR(TREE *tree, int parent, int *node) {
 
 void rotate_on_insert_LR(TREE *tree, int parent, int *node) {
     /* See Weiss, DS & AA in C++, 4 ed., Section 4.4.2, Figure 4.38 */
+#ifdef DEBUG
+        printf("LR (double) rotation at %d\n", tree->nodelist[*node].data);
+#endif // DEBUG
     int k3 = *node;
     int k1 = tree->nodelist[k3].left;
     int D = tree->nodelist[k3].right;
@@ -141,6 +150,9 @@ void rotate_on_insert_LR(TREE *tree, int parent, int *node) {
 
 void rotate_on_insert_RL(TREE *tree, int parent, int *node) {
     /* See CMSC 420 Lecture Notes by David M. Mount, UMCP, pg. 39. */
+#ifdef DEBUG
+        printf("RL (double) rotation at %d\n", tree->nodelist[*node].data);
+#endif // DEBUG
     int k1 = *node;
     rotate_on_insert_LL(tree, k1, &(tree->nodelist[k1].right));
     rotate_on_insert_RR(tree, parent, node);
@@ -153,13 +165,20 @@ void balance(TREE *tree, int parent, int *node) {
     int right = tree->nodelist[thisnode].right;
 
     if (HEIGHT(tree, left) - HEIGHT(tree, right) > 1) {
-        if (HEIGHT(tree, tree->nodelist[left].left) > HEIGHT(tree, tree->nodelist[left].right))
+#ifdef DEBUG
+        printf("Left sub-tree too high at %d\n", tree->nodelist[thisnode].data);
+#endif // DEBUG
+
+        if (HEIGHT(tree, tree->nodelist[left].left) >= HEIGHT(tree, tree->nodelist[left].right))
             rotate_on_insert_LL(tree, parent, node);
         else
             rotate_on_insert_LR(tree, parent, node);
     }
     else if (HEIGHT(tree, right) - HEIGHT(tree, left) > 1) {
-        if (HEIGHT(tree, tree->nodelist[right].right) > HEIGHT(tree, tree->nodelist[right].left))
+#ifdef DEBUG
+        printf("Right sub-tree too high at %d\n", tree->nodelist[thisnode].data);
+#endif // DEBUG
+        if (HEIGHT(tree, tree->nodelist[right].right) >= HEIGHT(tree, tree->nodelist[right].left))
             rotate_on_insert_RR(tree, parent, node);
         else
             rotate_on_insert_RL(tree, parent, node);
